@@ -279,19 +279,23 @@
         </div>
         <div class="info-item">
           <div class="label">🅿️ Parken</div>
-          <div class="value">Parkplätze am Rathaus Göttelfingen<br><span style="color:var(--muted);font-size:0.88rem">Rathausstraße 1 · ca. 1 Min. Fußweg</span></div>
+          <div class="value">Parkplätze Göttelfingen<br><span style="color:var(--muted);font-size:0.88rem">Lindenstraße 1 · ca. 1 Min. Fußweg</span></div>
         </div>
       </div>
     </div>
 
     <!-- Karte -->
     <div class="card" style="padding: 0; overflow: hidden;">
-      <div class="map-wrap">
+      <div class="map-wrap" style="position:relative;">
         <iframe
-          src="https://www.openstreetmap.org/export/embed.html?bbox=8.7550,48.4930,8.7610,48.4955&layer=mapnik"
+          src="https://www.openstreetmap.org/export/embed.html?bbox=8.7550,48.4928,8.7608,48.4958&layer=mapnik"
           allowfullscreen
           loading="lazy">
         </iframe>
+        <!-- Roter Pin: Feier (48.494233, 8.757681) -->
+        <div id="pinFeier" style="position:absolute;transform:translate(-50%,-100%);font-size:1.6rem;filter:drop-shadow(0 2px 3px rgba(0,0,0,0.5));pointer-events:none;">📍</div>
+        <!-- Blauer P: Parkplatz (48.49402, 8.7568664) -->
+        <div id="pinPark" style="position:absolute;transform:translate(-50%,-50%);background:#1a73e8;color:#fff;font-weight:900;font-size:0.8rem;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,0.5);pointer-events:none;">P</div>
       </div>
     </div>
 
@@ -356,7 +360,37 @@
   const { createClient } = supabase;
   const db = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  // ── Felder ein-/ausblenden je nach Status ─────────────────
+  // Pins auf Karte positionieren
+  function positionPins() {
+    const wrap = document.querySelector('.map-wrap');
+    const iframe = wrap.querySelector('iframe');
+    const rect = iframe.getBoundingClientRect();
+    const W = rect.width, H = rect.height;
+
+    // Karten-Bounding Box (muss zur iframe-src bbox passen)
+    const bboxW = 8.7550, bboxE = 8.7608;
+    const bboxS = 48.4928, bboxN = 48.4958;
+
+    function toXY(lat, lng) {
+      const x = (lng - bboxW) / (bboxE - bboxW) * W;
+      const y = (1 - (lat - bboxS) / (bboxN - bboxS)) * H;
+      return { x, y };
+    }
+
+    const feier = toXY(48.494233, 8.757681);
+    const park  = toXY(48.49402,  8.756866);
+
+    const pf = document.getElementById('pinFeier');
+    pf.style.left = feier.x + 'px';
+    pf.style.top  = feier.y + 'px';
+
+    const pp = document.getElementById('pinPark');
+    pp.style.left = park.x + 'px';
+    pp.style.top  = park.y + 'px';
+  }
+
+  window.addEventListener('load', positionPins);
+  window.addEventListener('resize', positionPins);
   const extraFields = document.getElementById('extraFields');
   document.querySelectorAll('input[name="status"]').forEach(r => {
     r.addEventListener('change', () => {
