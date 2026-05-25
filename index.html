@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gartenfest – 50. Geburtstag</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    :root {
+      --accent: #ffb347;
+      --accent-glow: rgba(255,179,71,0.25);
+      --card: rgba(10,10,10,0.82);
+      --text: #f5f5f5;
+      --muted: #aaa;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      color: var(--text);
+      min-height: 100vh;
+      background: #000;
+    }
+
+    /* Hero mit Hintergrundbild */
+    .hero {
+      position: relative;
+      width: 100%;
+      min-height: 100vh;
+      background: url('https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=1600&q=80') center/cover no-repeat fixed;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .hero::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.75) 100%);
+      z-index: 0;
+    }
+
+    .content {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 520px;
+      padding: 40px 20px 60px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    /* Header */
+    header {
+      text-align: center;
+      padding: 10px 0 6px;
+    }
+
+    .lights {
+      font-size: 1.6rem;
+      letter-spacing: 6px;
+      filter: drop-shadow(0 0 8px var(--accent));
+    }
+
+    header h1 {
+      font-size: 2.4rem;
+      font-weight: 200;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: #fff;
+      text-shadow: 0 0 30px var(--accent-glow), 0 2px 8px rgba(0,0,0,0.8);
+      margin: 10px 0 6px;
+    }
+
+    header .subtitle {
+      color: var(--accent);
+      font-size: 0.95rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    /* Karten */
+    .card {
+      background: var(--card);
+      border: 1px solid rgba(255,179,71,0.18);
+      border-radius: 14px;
+      padding: 22px 24px;
+      backdrop-filter: blur(12px);
+    }
+
+    .card-title {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--accent);
+      margin-bottom: 14px;
+    }
+
+    /* Willkommen */
+    .welcome-text {
+      font-size: 1rem;
+      line-height: 1.7;
+      color: #ddd;
+    }
+
+    /* Infos */
+    .info-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .info-item .label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--muted);
+      margin-bottom: 3px;
+    }
+
+    .info-item .value {
+      font-size: 0.97rem;
+      color: var(--text);
+    }
+
+    /* Karte */
+    .map-wrap {
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid rgba(255,179,71,0.18);
+    }
+
+    .map-wrap iframe {
+      width: 100%;
+      height: 220px;
+      border: 0;
+      display: block;
+    }
+
+    /* Formular */
+    .form-group { margin-bottom: 18px; }
+    .form-group:last-child { margin-bottom: 0; }
+
+    label {
+      display: block;
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin-bottom: 7px;
+      letter-spacing: 0.5px;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    select {
+      width: 100%;
+      padding: 11px 14px;
+      background: rgba(0,0,0,0.6);
+      border: 1px solid #333;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 0.97rem;
+      transition: border 0.25s;
+    }
+
+    input[type="text"]:focus,
+    input[type="number"]:focus,
+    select:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+
+    select option { background: #1a1a1a; }
+
+    /* Toggle Zusage/Absage */
+    .toggle-group {
+      display: flex;
+      gap: 10px;
+    }
+
+    .toggle-group input[type="radio"] { display: none; }
+
+    .toggle-group label {
+      flex: 1;
+      text-align: center;
+      padding: 11px;
+      background: rgba(0,0,0,0.6);
+      border: 1px solid #333;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.92rem;
+      color: var(--muted);
+      transition: all 0.2s;
+      margin: 0;
+      letter-spacing: 0;
+    }
+
+    .toggle-group input[type="radio"]:checked + label {
+      border-color: var(--accent);
+      background: rgba(255,179,71,0.1);
+      color: var(--accent);
+    }
+
+    /* Submit Button */
+    .btn {
+      width: 100%;
+      padding: 14px;
+      background: var(--accent);
+      border: none;
+      border-radius: 8px;
+      color: #000;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: 1px;
+      transition: opacity 0.2s, transform 0.1s;
+      margin-top: 6px;
+    }
+
+    .btn:hover { opacity: 0.88; }
+    .btn:active { transform: scale(0.98); }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* Erfolg */
+    .success {
+      display: none;
+      text-align: center;
+      padding: 30px 20px;
+    }
+
+    .success .icon { font-size: 3rem; margin-bottom: 14px; }
+
+    .success h2 {
+      color: var(--accent);
+      font-size: 1.6rem;
+      font-weight: 300;
+      letter-spacing: 2px;
+      margin-bottom: 10px;
+    }
+
+    .success p { color: var(--muted); line-height: 1.6; }
+
+    /* Responsive */
+    @media (max-width: 400px) {
+      header h1 { font-size: 1.8rem; letter-spacing: 3px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="content">
+
+    <header>
+      <div class="lights">✦ ✦ ✦</div>
+      <h1>Gartenfest</h1>
+      <div class="subtitle">Sommerabend &amp; Lichterglanz</div>
+    </header>
+
+    <!-- Willkommen -->
+    <div class="card">
+      <div class="card-title">Herzliche Einladung</div>
+      <p class="welcome-text">Anlässlich meines 50. Geburtstags feiern wir ein Gartenfest. Wir würden uns freuen, wenn Ihr unsere Gäste werdet.</p>
+    </div>
+
+    <!-- Infos -->
+    <div class="card">
+      <div class="card-title">Details</div>
+      <div class="info-grid">
+        <div class="info-item">
+          <div class="label">📅 Datum &amp; Uhrzeit</div>
+          <div class="value">Samstag, 04. Juli 2026 · ab 17:30 Uhr</div>
+        </div>
+        <div class="info-item">
+          <div class="label">📍 Adresse</div>
+          <div class="value">Rathausstraße 10/1<br>72184 Eutingen im Gäu OT Göttelfingen</div>
+        </div>
+        <div class="info-item">
+          <div class="label">🅿️ Parken</div>
+          <div class="value">Parkplätze am Rathaus Göttelfingen<br><span style="color:var(--muted);font-size:0.88rem">Rathausstraße 1 · ca. 1 Min. Fußweg</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Karte -->
+    <div class="card" style="padding: 0; overflow: hidden;">
+      <div class="map-wrap">
+        <iframe
+          src="https://www.openstreetmap.org/export/embed.html?bbox=8.7460,48.4870,8.7560,48.4930&layer=mapnik&marker=48.4900,8.7510"
+          allowfullscreen
+          loading="lazy">
+        </iframe>
+      </div>
+    </div>
+
+    <!-- RSVP Formular -->
+    <div class="card" id="formCard">
+      <div class="card-title">Anmeldung</div>
+
+      <form id="rsvpForm">
+        <div class="form-group">
+          <label>Kommst du?</label>
+          <div class="toggle-group">
+            <input type="radio" id="ja" name="status" value="Zusage" checked>
+            <label for="ja">🎉 Ich komme gerne!</label>
+            <input type="radio" id="nein" name="status" value="Absage">
+            <label for="nein">😔 Kann leider nicht</label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="name">Dein Name</label>
+          <input type="text" id="name" required placeholder="Vor- und Nachname">
+        </div>
+
+        <div id="extraFields">
+          <div class="form-group">
+            <label for="anzahl">Anzahl Personen (inkl. dir)</label>
+            <input type="number" id="anzahl" min="1" max="20" value="1">
+          </div>
+
+          <div class="form-group">
+            <label for="essen">Ernährung</label>
+            <select id="essen">
+              <option value="Allesesser">🍖 Ich esse alles</option>
+              <option value="Vegetarisch">🥗 Vegetarisch</option>
+              <option value="Vegan">🌱 Vegan</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="allergien">Allergien / Unverträglichkeiten</label>
+            <input type="text" id="allergien" placeholder="z.B. Nüsse, Gluten (optional)">
+          </div>
+        </div>
+
+        <button type="submit" class="btn" id="submitBtn">Antwort absenden ✓</button>
+      </form>
+
+      <div class="success" id="successMsg">
+        <div class="icon">🎉</div>
+        <h2>Vielen Dank!</h2>
+        <p id="successText">Deine Anmeldung wurde erfolgreich übermittelt.<br>Wir freuen uns auf dich!</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  // ── Supabase ──────────────────────────────────────────────
+  const SUPABASE_URL  = "https://lrzbbiatthcpfjqhisxi.supabase.co";
+  const SUPABASE_KEY  = "sb_publishable_gwMCfUB4e4m9rIhRclzwFg_4W_PQkE9";
+  const { createClient } = supabase;
+  const db = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  // ── Felder ein-/ausblenden je nach Status ─────────────────
+  const extraFields = document.getElementById('extraFields');
+  document.querySelectorAll('input[name="status"]').forEach(r => {
+    r.addEventListener('change', () => {
+      extraFields.style.display = r.value === 'Zusage' ? 'block' : 'none';
+    });
+  });
+
+  // ── Formular absenden ─────────────────────────────────────
+  document.getElementById('rsvpForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.textContent = 'Wird gesendet …';
+
+    const status   = document.querySelector('input[name="status"]:checked').value;
+    const istZusage = status === 'Zusage';
+
+    const payload = {
+      name:             document.getElementById('name').value.trim(),
+      status:           status,
+      Anzahl:           istZusage ? parseInt(document.getElementById('anzahl').value) : 0,
+      essengewohnheiten: istZusage ? document.getElementById('essen').value : 'N/A',
+      allergien:        istZusage ? document.getElementById('allergien').value.trim() : 'N/A',
+    };
+
+    const { error } = await db.from('gaeste').insert([payload]);
+
+    if (error) {
+      alert('Fehler beim Senden: ' + error.message);
+      btn.disabled = false;
+      btn.textContent = 'Antwort absenden ✓';
+    } else {
+      document.getElementById('rsvpForm').style.display = 'none';
+      const msg = document.getElementById('successMsg');
+      msg.style.display = 'block';
+      if (!istZusage) {
+        document.getElementById('successText').textContent =
+          'Schade, dass du nicht kommen kannst. Danke für deine Rückmeldung!';
+      }
+    }
+  });
+</script>
+
+</body>
+</html>
