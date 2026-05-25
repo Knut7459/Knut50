@@ -288,14 +288,22 @@
     <div class="card" style="padding: 0; overflow: hidden;">
       <div class="map-wrap" style="position:relative;">
         <iframe
-          src="https://www.openstreetmap.org/export/embed.html?bbox=8.7550,48.4928,8.7608,48.4958&layer=mapnik"
+          src="https://www.openstreetmap.org/export/embed.html?bbox=8.7550,48.4928,8.7608,48.4958&layer=mapnik&marker=48.494233,8.757681"
           allowfullscreen
           loading="lazy">
         </iframe>
-        <!-- Roter Pin: Feier (48.494233, 8.757681) -->
-        <div id="pinFeier" style="position:absolute;transform:translate(-50%,-100%);font-size:1.6rem;filter:drop-shadow(0 2px 3px rgba(0,0,0,0.5));pointer-events:none;">📍</div>
-        <!-- Blauer P: Parkplatz (48.49402, 8.7568664) -->
-        <div id="pinPark" style="position:absolute;transform:translate(-50%,-50%);background:#1a73e8;color:#fff;font-weight:900;font-size:0.8rem;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,0.5);pointer-events:none;">P</div>
+      </div>
+      <div style="display:flex;gap:10px;padding:12px;">
+        <a href="https://www.openstreetmap.org/?mlat=48.494233&mlon=8.757681#map=18/48.494233/8.757681"
+           target="_blank"
+           style="flex:1;text-align:center;padding:10px;background:rgba(255,179,71,0.12);border:1px solid var(--accent);border-radius:8px;color:var(--accent);text-decoration:none;font-size:0.85rem;">
+          📍 Veranstaltungsort
+        </a>
+        <a href="https://www.openstreetmap.org/?mlat=48.49402&mlon=8.7568664#map=19/48.49402/8.7568664"
+           target="_blank"
+           style="flex:1;text-align:center;padding:10px;background:rgba(26,115,232,0.12);border:1px solid #1a73e8;border-radius:8px;color:#1a73e8;text-decoration:none;font-size:0.85rem;">
+          🅿️ Parkplatz
+        </a>
       </div>
     </div>
 
