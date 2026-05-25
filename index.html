@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gartenfest – 50. Geburtstag</title>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     :root {
       --accent: #ffb347;
@@ -13,17 +12,13 @@
       --text: #f5f5f5;
       --muted: #aaa;
     }
-
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       color: var(--text);
       min-height: 100vh;
       background: #000;
     }
-
-    /* Hero mit Hintergrundbild */
     .hero {
       position: relative;
       width: 100%;
@@ -33,7 +28,6 @@
       flex-direction: column;
       align-items: center;
     }
-
     .hero::before {
       content: '';
       position: fixed;
@@ -41,7 +35,6 @@
       background: linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.75) 100%);
       z-index: 0;
     }
-
     .content {
       position: relative;
       z-index: 1;
@@ -52,19 +45,12 @@
       flex-direction: column;
       gap: 24px;
     }
-
-    /* Header */
-    header {
-      text-align: center;
-      padding: 10px 0 6px;
-    }
-
+    header { text-align: center; padding: 10px 0 6px; }
     .lights {
       font-size: 1.6rem;
       letter-spacing: 6px;
       filter: drop-shadow(0 0 8px var(--accent));
     }
-
     header h1 {
       font-size: 2.4rem;
       font-weight: 200;
@@ -74,15 +60,12 @@
       text-shadow: 0 0 30px var(--accent-glow), 0 2px 8px rgba(0,0,0,0.8);
       margin: 10px 0 6px;
     }
-
     header .subtitle {
       color: var(--accent);
       font-size: 0.95rem;
       letter-spacing: 2px;
       text-transform: uppercase;
     }
-
-    /* Karten */
     .card {
       background: var(--card);
       border: 1px solid rgba(255,179,71,0.18);
@@ -90,7 +73,6 @@
       padding: 22px 24px;
       backdrop-filter: blur(12px);
     }
-
     .card-title {
       font-size: 0.7rem;
       text-transform: uppercase;
@@ -98,20 +80,8 @@
       color: var(--accent);
       margin-bottom: 14px;
     }
-
-    /* Willkommen */
-    .welcome-text {
-      font-size: 1rem;
-      line-height: 1.7;
-      color: #ddd;
-    }
-
-    /* Infos */
-    .info-grid {
-      display: grid;
-      gap: 14px;
-    }
-
+    .welcome-text { font-size: 1rem; line-height: 1.7; color: #ddd; }
+    .info-grid { display: grid; gap: 14px; }
     .info-item .label {
       font-size: 0.7rem;
       text-transform: uppercase;
@@ -119,30 +89,30 @@
       color: var(--muted);
       margin-bottom: 3px;
     }
-
-    .info-item .value {
-      font-size: 0.97rem;
-      color: var(--text);
+    .info-item .value { font-size: 0.97rem; color: var(--text); }
+    .map-wrap { border-radius: 10px; overflow: hidden; }
+    .map-wrap iframe { width: 100%; height: 220px; border: 0; display: block; }
+    .map-btns { display: flex; gap: 10px; padding: 12px; }
+    .map-btn {
+      flex: 1;
+      text-align: center;
+      padding: 10px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 0.85rem;
     }
-
-    /* Karte */
-    .map-wrap {
-      border-radius: 10px;
-      overflow: hidden;
-      border: 1px solid rgba(255,179,71,0.18);
+    .map-btn-fest {
+      background: rgba(255,179,71,0.12);
+      border: 1px solid var(--accent);
+      color: var(--accent);
     }
-
-    .map-wrap iframe {
-      width: 100%;
-      height: 220px;
-      border: 0;
-      display: block;
+    .map-btn-park {
+      background: rgba(26,115,232,0.12);
+      border: 1px solid #1a73e8;
+      color: #1a73e8;
     }
-
-    /* Formular */
     .form-group { margin-bottom: 18px; }
     .form-group:last-child { margin-bottom: 0; }
-
     label {
       display: block;
       font-size: 0.82rem;
@@ -150,7 +120,6 @@
       margin-bottom: 7px;
       letter-spacing: 0.5px;
     }
-
     input[type="text"],
     input[type="number"],
     select {
@@ -163,7 +132,6 @@
       font-size: 0.97rem;
       transition: border 0.25s;
     }
-
     input[type="text"]:focus,
     input[type="number"]:focus,
     select:focus {
@@ -171,18 +139,10 @@
       border-color: var(--accent);
       box-shadow: 0 0 0 3px var(--accent-glow);
     }
-
     select option { background: #1a1a1a; }
-
-    /* Toggle Zusage/Absage */
-    .toggle-group {
-      display: flex;
-      gap: 10px;
-    }
-
+    .toggle-group { display: flex; gap: 10px; }
     .toggle-group input[type="radio"] { display: none; }
-
-    .toggle-group label {
+    .toggle-group .toggle-label {
       flex: 1;
       text-align: center;
       padding: 11px;
@@ -196,14 +156,11 @@
       margin: 0;
       letter-spacing: 0;
     }
-
-    .toggle-group input[type="radio"]:checked + label {
+    .toggle-group input[type="radio"]:checked + .toggle-label {
       border-color: var(--accent);
       background: rgba(255,179,71,0.1);
       color: var(--accent);
     }
-
-    /* Submit Button */
     .btn {
       width: 100%;
       padding: 14px;
@@ -218,20 +175,11 @@
       transition: opacity 0.2s, transform 0.1s;
       margin-top: 6px;
     }
-
     .btn:hover { opacity: 0.88; }
     .btn:active { transform: scale(0.98); }
     .btn:disabled { opacity: 0.5; cursor: not-allowed; }
-
-    /* Erfolg */
-    .success {
-      display: none;
-      text-align: center;
-      padding: 30px 20px;
-    }
-
+    .success { display: none; text-align: center; padding: 30px 20px; }
     .success .icon { font-size: 3rem; margin-bottom: 14px; }
-
     .success h2 {
       color: var(--accent);
       font-size: 1.6rem;
@@ -239,10 +187,7 @@
       letter-spacing: 2px;
       margin-bottom: 10px;
     }
-
     .success p { color: var(--muted); line-height: 1.6; }
-
-    /* Responsive */
     @media (max-width: 400px) {
       header h1 { font-size: 1.8rem; letter-spacing: 3px; }
     }
@@ -284,55 +229,28 @@
       </div>
     </div>
 
-    <!-- Karte -->
-    <div class="card" style="padding: 0; overflow: hidden;">
-      <div class="map-wrap" style="position:relative;">
-        <iframe
-          src="https://www.openstreetmap.org/export/embed.html?bbox=8.7550,48.4928,8.7608,48.4968&layer=mapnik&marker=48.4945543,8.757359"
-          allowfullscreen
-          loading="lazy">
-        </iframe>
-      </div>
-      <div style="display:flex;gap:10px;padding:12px;">
-        <a            href="https://www.openstreetmap.org/?mlat=48.4945543&mlon=8.757359#map=19/48.4945543/8.757359"
-           target="_blank"
-           style="flex:1;text-align:center;padding:10px;background:rgba(255,179,71,0.12);border:1px solid var(--accent);border-radius:8px;color:var(--accent);text-decoration:none;font-size:0.85rem;">
-          📍 Veranstaltungsort
-        </a>
-        <a href="https://www.openstreetmap.org/?mlat=48.49402&mlon=8.7568664#map=19/48.49402/8.7568664"
-           target="_blank"
-           style="flex:1;text-align:center;padding:10px;background:rgba(26,115,232,0.12);border:1px solid #1a73e8;border-radius:8px;color:#1a73e8;text-decoration:none;font-size:0.85rem;">
-          🅿️ Parkplatz
-        </a>
-      </div>
-    </div>
-
     <!-- RSVP Formular -->
     <div class="card" id="formCard">
       <div class="card-title">Anmeldung</div>
-
-      <form id="rsvpForm">
+      <div id="rsvpForm">
         <div class="form-group">
           <label>Kommst du?</label>
           <div class="toggle-group">
             <input type="radio" id="ja" name="status" value="Zusage" checked>
-            <label for="ja">🎉 Ich komme gerne!</label>
+            <label for="ja" class="toggle-label">🎉 Ich komme gerne!</label>
             <input type="radio" id="nein" name="status" value="Absage">
-            <label for="nein">😔 Kann leider nicht</label>
+            <label for="nein" class="toggle-label">😔 Kann leider nicht</label>
           </div>
         </div>
-
         <div class="form-group">
           <label for="name">Dein Name</label>
           <input type="text" id="name" required placeholder="Vor- und Nachname">
         </div>
-
         <div id="extraFields">
           <div class="form-group">
             <label for="anzahl">Anzahl Personen (inkl. dir)</label>
             <input type="number" id="anzahl" min="1" max="20" value="1">
           </div>
-
           <div class="form-group">
             <label for="essen">Ernährung</label>
             <select id="essen">
@@ -341,15 +259,13 @@
               <option value="Vegan">🌱 Vegan</option>
             </select>
           </div>
-
           <div class="form-group">
             <label for="allergien">Allergien / Unverträglichkeiten</label>
             <input type="text" id="allergien" placeholder="z.B. Nüsse, Gluten (optional)">
           </div>
         </div>
-
-        <button type="submit" class="btn" id="submitBtn">Antwort absenden ✓</button>
-      </form>
+        <button class="btn" id="submitBtn">Antwort absenden ✓</button>
+      </div>
 
       <div class="success" id="successMsg">
         <div class="icon">🎉</div>
@@ -360,22 +276,20 @@
 
     <!-- Karte -->
     <div class="card" style="padding: 0; overflow: hidden;">
-      <div class="map-wrap" style="position:relative;">
+      <div class="map-wrap">
         <iframe
-          src="https://www.openstreetmap.org/export/embed.html?bbox=8.7540,48.4928,8.7610,48.4968&layer=mapnik&marker=48.49455,8.75700&query=Rathausstra%C3%9Fe+10%2C+72184+Eutingen+im+G%C3%A4u"
+          src="https://www.openstreetmap.org/export/embed.html?bbox=8.7540,48.4928,8.7610,48.4968&layer=mapnik&marker=48.49455,8.75700"
           allowfullscreen
           loading="lazy">
         </iframe>
       </div>
-      <div style="display:flex;gap:10px;padding:12px;">
+      <div class="map-btns">
         <a href="https://www.openstreetmap.org/search?query=Rathausstra%C3%9Fe+10%2C+72184+Eutingen+im+G%C3%A4u"
-           target="_blank"
-           style="flex:1;text-align:center;padding:10px;background:rgba(255,179,71,0.12);border:1px solid var(--accent);border-radius:8px;color:var(--accent);text-decoration:none;font-size:0.85rem;">
+           target="_blank" class="map-btn map-btn-fest">
           📍 Veranstaltungsort
         </a>
         <a href="https://www.openstreetmap.org/?mlat=48.49402&mlon=8.7568664#map=19/48.49402/8.7568664"
-           target="_blank"
-           style="flex:1;text-align:center;padding:10px;background:rgba(26,115,232,0.12);border:1px solid #1a73e8;border-radius:8px;color:#1a73e8;text-decoration:none;font-size:0.85rem;">
+           target="_blank" class="map-btn map-btn-park">
           🅿️ Parkplatz
         </a>
       </div>
@@ -385,84 +299,67 @@
 </div>
 
 <script>
-  // ── Supabase ──────────────────────────────────────────────
-  const SUPABASE_URL  = "https://amtkpekufuysnxdbmkyl.supabase.co";
-  const SUPABASE_KEY  = "sb_publishable_BFXO2LxmBIRN9vQqW1rVwQ_GY5XywwM";
-  const { createClient } = supabase;
-  const db = createClient(SUPABASE_URL, SUPABASE_KEY);
+  // Supabase per CDN laden
+  const script = document.createElement('script');
+  script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
+  script.onload = function() { initApp(); };
+  document.head.appendChild(script);
 
-  // Pins auf Karte positionieren
-  function positionPins() {
-    const wrap = document.querySelector('.map-wrap');
-    const iframe = wrap.querySelector('iframe');
-    const rect = iframe.getBoundingClientRect();
-    const W = rect.width, H = rect.height;
+  function initApp() {
+    const { createClient } = supabase;
+    const db = createClient(
+      "https://amtkpekufuysnxdbmkyl.supabase.co",
+      "sb_publishable_BFXO2LxmBIRN9vQqW1rVwQ_GY5XywwM"
+    );
 
-    // Karten-Bounding Box (muss zur iframe-src bbox passen)
-    const bboxW = 8.7550, bboxE = 8.7608;
-    const bboxS = 48.4928, bboxN = 48.4958;
-
-    function toXY(lat, lng) {
-      const x = (lng - bboxW) / (bboxE - bboxW) * W;
-      const y = (1 - (lat - bboxS) / (bboxN - bboxS)) * H;
-      return { x, y };
-    }
-
-    const feier = toXY(48.494233, 8.757681);
-    const park  = toXY(48.49402,  8.756866);
-
-    const pf = document.getElementById('pinFeier');
-    pf.style.left = feier.x + 'px';
-    pf.style.top  = feier.y + 'px';
-
-    const pp = document.getElementById('pinPark');
-    pp.style.left = park.x + 'px';
-    pp.style.top  = park.y + 'px';
-  }
-
-  window.addEventListener('load', positionPins);
-  window.addEventListener('resize', positionPins);
-  const extraFields = document.getElementById('extraFields');
-  document.querySelectorAll('input[name="status"]').forEach(r => {
-    r.addEventListener('change', () => {
-      extraFields.style.display = r.value === 'Zusage' ? 'block' : 'none';
+    // Felder ein-/ausblenden
+    const extraFields = document.getElementById('extraFields');
+    document.querySelectorAll('input[name="status"]').forEach(r => {
+      r.addEventListener('change', () => {
+        extraFields.style.display = r.value === 'Zusage' ? 'block' : 'none';
+      });
     });
-  });
 
-  // ── Formular absenden ─────────────────────────────────────
-  document.getElementById('rsvpForm').addEventListener('submit', async e => {
-    e.preventDefault();
-    const btn = document.getElementById('submitBtn');
-    btn.disabled = true;
-    btn.textContent = 'Wird gesendet …';
-
-    const status   = document.querySelector('input[name="status"]:checked').value;
-    const istZusage = status === 'Zusage';
-
-    const payload = {
-      name:             document.getElementById('name').value.trim(),
-      status:           status,
-      Anzahl:           istZusage ? parseInt(document.getElementById('anzahl').value) : 0,
-      essengewohnheiten: istZusage ? document.getElementById('essen').value : 'N/A',
-      allergien:        istZusage ? document.getElementById('allergien').value.trim() : 'N/A',
-    };
-
-    const { error } = await db.from('gaeste').insert([payload]);
-
-    if (error) {
-      alert('Fehler beim Senden: ' + error.message);
-      btn.disabled = false;
-      btn.textContent = 'Antwort absenden ✓';
-    } else {
-      document.getElementById('rsvpForm').style.display = 'none';
-      const msg = document.getElementById('successMsg');
-      msg.style.display = 'block';
-      if (!istZusage) {
-        document.getElementById('successText').textContent =
-          'Schade, dass du nicht kommen kannst. Danke für deine Rückmeldung!';
+    // Formular absenden
+    document.getElementById('submitBtn').addEventListener('click', async () => {
+      const nameVal = document.getElementById('name').value.trim();
+      if (!nameVal) {
+        alert('Bitte gib deinen Namen ein.');
+        return;
       }
-    }
-  });
+
+      const btn = document.getElementById('submitBtn');
+      btn.disabled = true;
+      btn.textContent = 'Wird gesendet …';
+
+      const status = document.querySelector('input[name="status"]:checked').value;
+      const istZusage = status === 'Zusage';
+
+      const payload = {
+        name: nameVal,
+        status: status,
+        Anzahl: istZusage ? parseInt(document.getElementById('anzahl').value) : 0,
+        essengewohnheiten: istZusage ? document.getElementById('essen').value : 'N/A',
+        allergien: istZusage ? document.getElementById('allergien').value.trim() : 'N/A',
+      };
+
+      const { error } = await db.from('gaeste').insert([payload]);
+
+      if (error) {
+        alert('Fehler beim Senden: ' + error.message);
+        btn.disabled = false;
+        btn.textContent = 'Antwort absenden ✓';
+      } else {
+        document.getElementById('rsvpForm').style.display = 'none';
+        const msg = document.getElementById('successMsg');
+        msg.style.display = 'block';
+        if (!istZusage) {
+          document.getElementById('successText').textContent =
+            'Schade, dass du nicht kommen kannst. Danke für deine Rückmeldung!';
+        }
+      }
+    });
+  }
 </script>
 
 </body>
