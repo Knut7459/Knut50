@@ -111,7 +111,7 @@
       border: 1px solid #1a73e8;
       color: #1a73e8;
     }
-    .form-group { margin-bottom: 18px; }
+    .form-group { margin-bottom: 10px; }
     .form-group:last-child { margin-bottom: 0; }
     label {
       display: block;
@@ -124,12 +124,12 @@
     input[type="number"],
     select {
       width: 100%;
-      padding: 11px 14px;
+      padding: 8px 12px;
       background: rgba(0,0,0,0.6);
       border: 1px solid #333;
       border-radius: 8px;
       color: #fff;
-      font-size: 0.97rem;
+      font-size: 0.93rem;
       transition: border 0.25s;
     }
     input[type="text"]:focus,
@@ -145,12 +145,12 @@
     .toggle-group .toggle-label {
       flex: 1;
       text-align: center;
-      padding: 11px;
+      padding: 8px;
       background: rgba(0,0,0,0.6);
       border: 1px solid #333;
       border-radius: 8px;
       cursor: pointer;
-      font-size: 0.92rem;
+      font-size: 0.88rem;
       color: var(--muted);
       transition: all 0.2s;
       margin: 0;
@@ -207,7 +207,7 @@
     <!-- Willkommen -->
     <div class="card">
       <div class="card-title">Herzliche Einladung</div>
-      <p class="welcome-text">Anlässlich meines 50. Geburtstags feiern wir ein Gartenfest. Wir würden uns freuen, wenn Ihr unsere Gäste werdet.</p>
+      <p class="welcome-text">Anlässlich meines 50. Geburtstags feiern wir ein kleines Gartenfest. Wir würden uns freuen, wenn Ihr unsere Gäste werdet.</p>
     </div>
 
     <!-- Infos -->
@@ -224,7 +224,7 @@
         </div>
         <div class="info-item">
           <div class="label">🅿️ Parken</div>
-          <div class="value">Parkplätze Göttelfingen<br><span style="color:var(--muted);font-size:0.88rem">Lindenstraße 1 · ca. 1 Min. Fußweg</span></div>
+          <div class="value">Parkplätze am Rathaus<br><span style="color:var(--muted);font-size:0.88rem">Lindenstraße 1 · ca. 1 Min. Fußweg</span></div>
         </div>
       </div>
     </div>
@@ -262,6 +262,11 @@
           <div class="form-group">
             <label for="allergien">Allergien / Unverträglichkeiten</label>
             <input type="text" id="allergien" placeholder="z.B. Nüsse, Gluten (optional)">
+          </div>
+          <div class="form-group">
+            <label for="sonst">Was ich noch sagen will:</label>
+            <textarea id="sonst" rows="3" placeholder="Deine Nachricht (optional)"
+              style="width:100%;padding:11px 14px;background:rgba(0,0,0,0.6);border:1px solid #333;border-radius:8px;color:#fff;font-size:0.97rem;resize:vertical;font-family:inherit;transition:border 0.25s;"></textarea>
           </div>
         </div>
         <button class="btn" id="submitBtn">Antwort absenden ✓</button>
@@ -341,6 +346,7 @@
         Anzahl: istZusage ? parseInt(document.getElementById('anzahl').value) : 0,
         essengewohnheiten: istZusage ? document.getElementById('essen').value : 'N/A',
         allergien: istZusage ? document.getElementById('allergien').value.trim() : 'N/A',
+        sonst: document.getElementById('sonst').value.trim(),
       };
 
       const { error } = await db.from('gaeste').insert([payload]);
